@@ -33,22 +33,22 @@ def readCurrentUser(current_user: User = Depends(get_current_user)):
     return current_user
 
 @app.get("/expenses", response_model=list[Expense])
-def getExpenses(db: Session = Depends(get_db)):
-    return expense_store.getExpenses(db)
+def getExpenses(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    return expense_store.getExpenses(db, current_user.id)
 
 @app.post("/expenses", response_model=Expense, status_code=201)
-def createExpense(payload: ExpenseCreator,db: Session = Depends(get_db)):
-    return expense_store.createExpense(db,payload)
+def createExpense(payload: ExpenseCreator,db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    return expense_store.createExpense(db,payload, current_user.id)
 
 @app.get("/expenses/{expense_id}", response_model=Expense)
-def getExpense(expense_id:int,db: Session = Depends(get_db)):
-    expense=expense_store.getExpense(db,expense_id)
+def getExpense(expense_id:int,db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    expense=expense_store.getExpense(db,expense_id, current_user.id)
     if expense is None:
         raise HTTPException(status_code=404, detail="Expense not found")
     return expense
 
 @app.delete("/expenses/{expense_id}", status_code=204)
-def deleteExpense(expense_id: int,db: Session = Depends(get_db)):
-    deleted=expense_store.deleteExpense(db,expense_id)
+def deleteExpense(expense_id: int,db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    deleted=expense_store.deleteExpense(db,expense_id, current_user.id)
     if not deleted:
         raise HTTPException(status_code=404, detail="Expense not found")
