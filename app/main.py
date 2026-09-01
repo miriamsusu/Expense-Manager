@@ -1,9 +1,11 @@
-from fastapi import Depends,FastAPI,HTTPException
+from datetime import date
+
+from fastapi import Depends,FastAPI,HTTPException,Query
 from app.crud import expenses as expense_store
 from app.crud import user as user_store
 from app.dependencies import get_db
 from sqlalchemy.orm import Session
-from app.schemas.expense import Expense,ExpenseCreator
+from app.schemas.expense import Category,CategorySummary,Expense,ExpenseCreator
 from app.schemas.user import Token, User as UserOut, UserCreate, UserLogin
 from app.auth.oauth2 import create_access_token, get_current_user
 from app.auth.security import verify_password
@@ -32,9 +34,21 @@ def login(payload: UserLogin, db: Session = Depends(get_db)):
 def readCurrentUser(current_user: User = Depends(get_current_user)):
     return current_user
 
+@app.get("/expenses/summary", response_model=list[CategorySummary])
+def getExpenseSummary(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    return expense_store.getExpenseSummary(db, current_user.id)
+
 @app.get("/expenses", response_model=list[Expense])
-def getExpenses(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    return expense_store.getExpenses(db, current_user.id)
+def getExpenses(
+    skip: int = Query(default=0, ge=0),
+    limit: int = Query(default=20, ge=1, le=100),
+    category: Category | None = None,
+    start_date: date | None = None,
+    end_date: date | None = None,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return expense_store.getExpenses(db, current_user.id, skip, limit, category, start_date, end_date)
 
 @app.post("/expenses", response_model=Expense, status_code=201)
 def createExpense(payload: ExpenseCreator,db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):

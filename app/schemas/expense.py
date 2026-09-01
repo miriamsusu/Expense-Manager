@@ -23,3 +23,7 @@ class Expense(ExpenseCreator):
     id: int
 
     model_config = {"from_attributes": True}
+
+class CategorySummary(BaseModel):
+    category: Category
+    total: float
