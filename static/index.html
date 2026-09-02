@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Manager</title>
     <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -51,6 +52,9 @@
             <p id="expense-message" class="message"></p>
 
             <h2>Spending by category</h2>
+            <div class="chart-wrap">
+                <canvas id="summary-chart"></canvas>
+            </div>
             <div id="summary"></div>
 
             <h2>Your expenses</h2>

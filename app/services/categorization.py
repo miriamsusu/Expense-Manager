@@ -1,11 +1,11 @@
 from app.schemas.expense import Category
 
 category_keywords:dict[Category, list[str]]={
-    Category.groceries: ["walmart", "kroger", "safeway", "trader joe", "whole foods", "grocery"],
+    Category.groceries: ["walmart", "kroger", "safeway", "trader joe", "whole foods", "grocery", "food", "lidl"],
     Category.entertainment: ["netflix", "spotify", "cinema", "movie", "steam", "concert"],
     Category.gas: ["shell", "socar", "omw", "mol", "fuel"],
     Category.housing: ["rent", "mortgage", "landlord", "apartment"],
-    Category.dining: ["restaurant", "starbucks", "mcdonald", "cafe", "pizza"],
+    Category.dining: ["restaurant", "starbucks", "mcdonald", "cafe", "pizza", "coffee"],
     Category.utilities: ["electric", "water bill", "internet", "comcast", "verizon"],
 }
 

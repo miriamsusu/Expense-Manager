@@ -77,3 +77,8 @@ button[type="submit"]:hover { background: #4338ca; }
     padding: 0.4rem 0; border-bottom: 1px solid #f1f1f1;
 }
 .summary-row .total { font-weight: 600; }
+
+.chart-wrap {
+    max-width: 320px;
+    margin: 0 auto 1rem;
+}

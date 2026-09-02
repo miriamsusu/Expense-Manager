@@ -152,6 +152,62 @@ async function refreshExpenses() {
         div.innerHTML = `<span>${escapeHtml(row.category)}</span><span class="total">$${row.total.toFixed(2)}</span>`;
         summaryEl.appendChild(div);
     }
+
+    renderChart(summary);
+}
+
+// A fixed palette so each category keeps a consistent, distinct color.
+const CATEGORY_COLORS = {
+    groceries: "#4f46e5",
+    entertainment: "#db2777",
+    gas: "#ea580c",
+    housing: "#0891b2",
+    dining: "#16a34a",
+    utilities: "#ca8a04",
+    other: "#6b7280",
+};
+
+let summaryChart = null;
+
+function renderChart(summary) {
+    const canvas = document.getElementById("summary-chart");
+
+    // With no data, tear down any existing chart and stop.
+    if (summary.length === 0) {
+        if (summaryChart) { summaryChart.destroy(); summaryChart = null; }
+        return;
+    }
+
+    const labels = summary.map(row => row.category);
+    const data = summary.map(row => row.total);
+    const colors = labels.map(c => CATEGORY_COLORS[c] || "#6b7280");
+
+    // If the chart already exists, just swap its data in — smoother than rebuilding.
+    if (summaryChart) {
+        summaryChart.data.labels = labels;
+        summaryChart.data.datasets[0].data = data;
+        summaryChart.data.datasets[0].backgroundColor = colors;
+        summaryChart.update();
+        return;
+    }
+
+    summaryChart = new Chart(canvas, {
+        type: "doughnut",
+        data: {
+            labels: labels,
+            datasets: [{ data: data, backgroundColor: colors, borderWidth: 2, borderColor: "#fff" }],
+        },
+        options: {
+            plugins: {
+                legend: { position: "bottom" },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => `${ctx.label}: $${ctx.parsed.toFixed(2)}`,
+                    },
+                },
+            },
+        },
+    });
 }
 
 // --- Delete an expense ---
