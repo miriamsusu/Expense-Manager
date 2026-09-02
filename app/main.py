@@ -1,6 +1,8 @@
 from datetime import date
 
 from fastapi import Depends,FastAPI,HTTPException,Query
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from app.crud import expenses as expense_store
 from app.crud import user as user_store
 from app.dependencies import get_db
@@ -12,9 +14,11 @@ from app.auth.security import verify_password
 from app.models.user import User
 app = FastAPI(title="Expense manager")
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 @app.get("/")
 def root():
-    return {"status":"ok"}
+    return FileResponse("static/index.html")
 
 @app.post("/auth/register", response_model=UserOut, status_code=201)
 def register(payload: UserCreate, db: Session = Depends(get_db)):

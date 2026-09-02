@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Manager</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Expense Manager</h1>
+
+        <!-- Auth section: shown when logged out -->
+        <div id="auth-section">
+            <div class="tabs">
+                <button id="tab-login" class="tab active" onclick="showTab('login')">Log in</button>
+                <button id="tab-register" class="tab" onclick="showTab('register')">Register</button>
+            </div>
+
+            <form id="login-form" class="auth-form">
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit">Log in</button>
+            </form>
+
+            <form id="register-form" class="auth-form hidden">
+                <input type="email" id="register-email" placeholder="Email" required>
+                <input type="text" id="register-phone" placeholder="Phone (e.g. +15551234567)" required>
+                <input type="password" id="register-password" placeholder="Password (min 8 chars)" required>
+                <button type="submit">Register</button>
+            </form>
+
+            <p id="auth-message" class="message"></p>
+        </div>
+
+        <!-- App section: shown when logged in -->
+        <div id="app-section" class="hidden">
+            <div class="topbar">
+                <span id="user-email"></span>
+                <button onclick="logout()" class="secondary">Log out</button>
+            </div>
+
+            <h2>Add an expense</h2>
+            <form id="expense-form" class="expense-form">
+                <input type="number" step="0.01" id="expense-amount" placeholder="Amount" required>
+                <input type="text" id="expense-descr" placeholder="Description" required>
+                <input type="date" id="expense-date" required>
+                <input type="text" id="expense-notes" placeholder="Notes (optional)">
+                <button type="submit">Add</button>
+            </form>
+            <p id="expense-message" class="message"></p>
+
+            <h2>Spending by category</h2>
+            <div id="summary"></div>
+
+            <h2>Your expenses</h2>
+            <div id="expense-list"></div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
